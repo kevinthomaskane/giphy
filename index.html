@@ -21,9 +21,25 @@
             height: 300px;
         }
 
+        button{
+            margin: 5px 5px 10px 5px;
+            border-radius: 10px;
+        }
+
         #gif {
             display: inline-block;
         }
+
+        p{
+            margin-bottom: 5px;
+            margin-top: 20px;
+        }
+
+        #search {
+            width: 92%;
+        }
+
+
     </style>
 </head>
 
@@ -59,15 +75,27 @@
         var gifs = ["basketball", "baseball", "soccer", "football", "hockey", "tennis", "ping pong"]
         var query
         
-        gifs.forEach(function (gif) {
-            var button = $("<button class='new-button'>").text(gif)
-            $("#buttons-row").append(button)
-        })
+
+        function renderGifs(arr){
+            for (let i =0; i < arr.length; i++){
+                var button = $("<button class='new-button btn-primary'>").text(arr[i])
+                $("#buttons-row").append(button) 
+            }
+        }
+
+        renderGifs(gifs)
 
         $("#search").click(function(){
             var userInput = $("input").val();
-            var newButton = $("<button class='new-button'>").text(userInput)
-            $("#buttons-row").append(newButton)   
+            if (userInput === ""){
+                $(this).attribute("disabled", true)
+            }
+            gifs.push(userInput);
+            $(".gif-area").html('');
+            $("#buttons-row").empty()
+            renderGifs(gifs)  
+            displayGifs(userInput) 
+            $("input").val('')
         })
 
         function displayGifs(query) {
@@ -80,30 +108,36 @@
                 for (let i = 0; i < data.data.length; i++) {
                     var newElement = $('<div id="gif">').append(`
                          <p>Rating : ${data.data[i].rating}</p> 
-                         <img class="still-gif still" src="${data.data[i].images.original_still.url}">       
+                         <img class="still-gif" src="${data.data[i].images.original_still.url}">       
                          `)
                     $(".gif-area").append(newElement)
-
-
                 }
-                $(document).on('click', '.still-gif', function () {
-                    var src = $(this).attr("src");
-                    console.log($(this).attr("src"))
-                    if ($(this).hasClass('still')) {
-                        $(this).attr('src', src.replace(/\_s.gif/i, ".gif"))
-                        $(this).removeClass('still');
-                    } else {
-                        $(this).addClass('still');
-                        $(this).attr('src', src.replace(/\.gif/i, "_s.gif"))
-                    }
-                });
+                
             })
         }
 
+        $(document).on('click', '.still-gif', function () {
+                    var src = $(this).attr("src");
+                    console.log(src)
+                    var splitString = src.split("/giphy");
+                    console.log(splitString)
+                    if (splitString[1]=== "_s.gif"){
+                        splitString[1]=".gif";
+                        var newURL = splitString.join('/giphy');
+                        console.log(newURL)
+                        $(this).attr("src", newURL)
+                    }
+                    else {
+                        splitString[1]="_s.gif";
+                        var nextURL = splitString.join('/giphy');
+                        console.log(nextURL)
+                        $(this).attr("src", nextURL)
+                    }           
+                });
 
         $(document).on("click", ".new-button", function () {
-            query = $(this).text();
-            $(".gif-area").empty();
+            query = $(this).html();
+            $(".gif-area").html('');
             displayGifs(query);
         })
 
