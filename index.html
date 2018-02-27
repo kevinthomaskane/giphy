@@ -14,11 +14,25 @@
         * {
             text-align: center;
         }
+        .container {
+            margin-top: 50px;
+        }
+
+        body{
+            background-image: url("https://i2.wp.com/www.stagecraftsllc.com/wp-content/uploads/2016/12/black-gradient-background.jpg")
+        }
+
+        .jumbotron {
+            background-image: url("https://media.giphy.com/media/kEfkVJxXWily/source.gif");
+            color: white;
+        }
 
         img {
             width: 300px;
-            padding: 20px;
+            border-radius: 30px;
+            margin: 15px;
             height: 300px;
+            box-shadow: 10px 10px 5px white;
         }
 
         button{
@@ -33,9 +47,11 @@
         p{
             margin-bottom: 5px;
             margin-top: 20px;
+            color: white;
         }
 
         #search {
+            margin-top: 20px;
             width: 92%;
         }
 
@@ -46,17 +62,18 @@
 <body>
     <div class="container">
         <div class="row">
-            <div class="col-md-4"></div>
-            <div class="col-md-4">
-                <h1>Search for a gif</h1>
-            </div>
-            <div class="col-md-4"></div>
+                <div class="jumbotron">
+                        <h1>Search for a gif, or choose from my favorites below</h1>
+                        
+                        <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p>
+                </div>
+            
         </div>
         <div class="row">
             <div class="col-md-5"></div>
             <div class="col-md-2">
-                <input type="text">
-                <button id="search" class="btn-success">Search</button>
+                <input type="text" placeholder="search for a gif">
+                <button id="search" class="btn-success" >Search</button>
             </div>
             <div class="col-md-5"></div>
         </div>
@@ -66,13 +83,14 @@
 
 
         <div class="row gif-area">
+                
         </div>
 
     </div>
 
     <script>
 
-        var gifs = ["basketball", "baseball", "soccer", "football", "hockey", "tennis", "ping pong"]
+        var gifs = ["basketball", "baseball", "soccer", "football", "minions", "tennis", "ping pong"]
         var query
         
 
@@ -86,6 +104,7 @@
         renderGifs(gifs)
 
         $("#search").click(function(){
+            $(".jumbotron").hide();
             var userInput = $("input").val();
             if (userInput === ""){
                 $(this).attribute("disabled", true)
@@ -136,6 +155,7 @@
                 });
 
         $(document).on("click", ".new-button", function () {
+            $(".jumbotron").hide();
             query = $(this).html();
             $(".gif-area").html('');
             displayGifs(query);
