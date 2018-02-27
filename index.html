@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Giphy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+    <style>
+        * {
+            text-align: center;
+        }
+
+        img {
+            width: 300px;
+            padding: 20px;
+            height: 300px;
+        }
+
+        #gif {
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <h1>Search for a gif</h1>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-5"></div>
+            <div class="col-md-2">
+                <input type="text">
+                <button id="search" class="btn-success">Search</button>
+            </div>
+            <div class="col-md-5"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-12" id="buttons-row"></div>
+        </div>
+
+
+        <div class="row gif-area">
+        </div>
+
+    </div>
+
+    <script>
+
+        var gifs = ["basketball", "baseball", "soccer", "football", "hockey", "tennis", "ping pong"]
+        var query
+        
+        gifs.forEach(function (gif) {
+            var button = $("<button class='new-button'>").text(gif)
+            $("#buttons-row").append(button)
+        })
+
+        $("#search").click(function(){
+            var userInput = $("input").val();
+            var newButton = $("<button class='new-button'>").text(userInput)
+            $("#buttons-row").append(newButton)   
+        })
+
+        function displayGifs(query) {
+            $.ajax({
+                method: "GET",
+                url: "https://api.giphy.com/v1/gifs/search?q=" + query + "&limit=9&rating=pg&api_key=yMJzx4OjRJRiAZ8jhPGnXjIhmkELYUmH"
+
+            }).done(function (data) {
+                console.log(data)
+                for (let i = 0; i < data.data.length; i++) {
+                    var newElement = $('<div id="gif">').append(`
+                         <p>Rating : ${data.data[i].rating}</p> 
+                         <img class="still-gif still" src="${data.data[i].images.original_still.url}">       
+                         `)
+                    $(".gif-area").append(newElement)
+
+
+                }
+                $(document).on('click', '.still-gif', function () {
+                    var src = $(this).attr("src");
+                    console.log($(this).attr("src"))
+                    if ($(this).hasClass('still')) {
+                        $(this).attr('src', src.replace(/\_s.gif/i, ".gif"))
+                        $(this).removeClass('still');
+                    } else {
+                        $(this).addClass('still');
+                        $(this).attr('src', src.replace(/\.gif/i, "_s.gif"))
+                    }
+                });
+            })
+        }
+
+
+        $(document).on("click", ".new-button", function () {
+            query = $(this).text();
+            $(".gif-area").empty();
+            displayGifs(query);
+        })
+
+    </script>
+</body>
+
+</html>
