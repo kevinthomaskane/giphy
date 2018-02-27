@@ -16,6 +16,7 @@
         }
         .container {
             margin-top: 50px;
+            margin-bottom: 50px;
         }
 
         body{
@@ -50,11 +51,6 @@
             color: white;
         }
 
-        #search {
-            margin-top: 20px;
-            width: 92%;
-        }
-
 
     </style>
 </head>
@@ -63,19 +59,19 @@
     <div class="container">
         <div class="row">
                 <div class="jumbotron">
-                        <h1>Search for a gif, or choose from my favorites below</h1>
-                        
-                        <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p>
+                        <h1>Search for a gif, or choose from my favorites below.</h1>
+                        <p>Click on a gif to make it start or pause</p>
+                        <p><a class="btn btn-danger btn-lg" href="" role="button">See the code</a></p>
                 </div>
             
         </div>
         <div class="row">
-            <div class="col-md-5"></div>
-            <div class="col-md-2">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
                 <input type="text" placeholder="search for a gif">
-                <button id="search" class="btn-success" >Search</button>
+                <button id="search" class="btn-danger" >Search</button>
             </div>
-            <div class="col-md-5"></div>
+            <div class="col-md-4"></div>
         </div>
         <div class="row">
             <div class="col-md-12" id="buttons-row"></div>
@@ -90,13 +86,13 @@
 
     <script>
 
-        var gifs = ["basketball", "baseball", "soccer", "football", "minions", "tennis", "ping pong"]
+        var gifs = ["basketball", "always sunny", "rappers", "football", "minions", "cats", "ping pong", "virginia tech"]
         var query
         
 
         function renderGifs(arr){
             for (let i =0; i < arr.length; i++){
-                var button = $("<button class='new-button btn-primary'>").text(arr[i])
+                var button = $("<button class='new-button btn-success'>").text(arr[i])
                 $("#buttons-row").append(button) 
             }
         }
@@ -125,8 +121,7 @@
             }).done(function (data) {
                 console.log(data)
                 for (let i = 0; i < data.data.length; i++) {
-                    var newElement = $('<div id="gif">').append(`
-                         <p>Rating : ${data.data[i].rating}</p> 
+                    var newElement = $('<div id="gif">').append(`                      
                          <img class="still-gif" src="${data.data[i].images.original_still.url}">       
                          `)
                     $(".gif-area").append(newElement)
